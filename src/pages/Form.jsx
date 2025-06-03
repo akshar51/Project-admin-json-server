@@ -88,7 +88,7 @@ const Form = (props) => {
                                 Password :
                               </label>
                               <input
-                                type="number"
+                                type="password"
                                 className="form-control"
                                 id="password"
                                 placeholder="Enter password"
