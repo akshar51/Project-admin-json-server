@@ -50,6 +50,23 @@ const Form = (props) => {
                         <div className="row">
                           <div className="col-md-6 col-lg-4">
                             <div className="form-group">
+                              <label htmlFor="full-name" className="fw-bold">
+                                Full Name :
+                              </label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="full-name"
+                                placeholder="Enter Full Name"
+                                name="fullName"
+                                onChange={handleChange}
+                                value={user.fullName || ""}
+                              />
+                              {
+                                error.fullName && <span className="text-danger fw-bold">{error.fullName}</span>
+                              }
+                            </div>
+                            <div className="form-group">
                               <label htmlFor="email" className="fw-bold">
                                 Email :
                               </label>

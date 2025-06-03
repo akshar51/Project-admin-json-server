@@ -109,6 +109,7 @@ const Datatable = (props) => {
                     <thead>
                       <tr>
                         <th>Sr No.</th>
+                        <th>Full Name</th>
                         <th>Email</th>
                         <th>Password</th>
                         <th>Action</th>
@@ -117,6 +118,7 @@ const Datatable = (props) => {
                     <tfoot>
                       <tr>
                         <th>Sr No.</th>
+                        <th>Full Name</th>
                         <th>Email</th>
                         <th>Password</th>
                         <th>Action</th>
@@ -127,6 +129,7 @@ const Datatable = (props) => {
                         list.map((item,idx)=>(
                           <tr key={item.id}>
                             <td>{idx + 1}</td>
+                            <td>{item.fullName}</td>
                             <td>{item.email}</td>
                             <td>{item.password}</td>
                             <td>

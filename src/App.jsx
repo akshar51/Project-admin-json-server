@@ -68,6 +68,7 @@ const App = () => {
 
   const validation =()=>{
     let error = {}
+    if(!user.fullName) error.fullName = "Full Name is required"
     if(!user.email) error.email = "Email is required"
     if(!user.password) error.password = "Password is required"
     setError(error)
