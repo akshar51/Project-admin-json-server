@@ -67,6 +67,23 @@ const Form = (props) => {
                               }
                             </div>
                             <div className="form-group">
+                              <label htmlFor="age" className="fw-bold">
+                                Age :
+                              </label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                id="age"
+                                placeholder="Enter Age"
+                                name="age"
+                                onChange={handleChange}
+                                value={user.age || ""}
+                              />
+                              {
+                                error.age && <span className="text-danger fw-bold">{error.age}</span>
+                              }
+                            </div>
+                            <div className="form-group">
                               <label htmlFor="email" className="fw-bold">
                                 Email :
                               </label>
