@@ -1,75 +1,172 @@
-## 📘 Application Overview
+# 🛠️ React Product Management App
 
-A simple React product management app with **form input, table view, CRUD operations**, and **localStorage** for data persistence. Routing is handled using **React Router**.
+A simple React product management application using **form inputs**, **CRUD operations**, **Axios for API calls**, and **React Router** for navigation. Data is persisted via a local JSON server (`http://localhost:3000/users`).
 
 ---
 
-## 🧩 App.js — Main Controller
+## 📁 Project Structure
 
-**Purpose**: Manages global state, form logic, storage, and navigation.
+```
+src/
+├── App.js
+├── pages/
+│   ├── Home.jsx
+│   ├── Form.jsx
+│   └── Datatable.jsx
+```
 
-### 🧠 State:
-- `product`: Current product form data.
-- `list`: All products stored.
-- `godown`: Array of selected godown values.
-- `editId`: Used to switch between add/edit mode.
-- `error`: Stores validation messages.
+---
+
+## 🚦 Routing Overview
+
+| Route        | Component   | Purpose                     |
+|--------------|-------------|-----------------------------|
+| `/`          | `Home`      | Landing page                |
+| `/form`      | `Form`      | Add/Edit product form       |
+| `/datatable` | `Datatable` | Product list with actions   |
+
+---
+
+## 🧠 App.js — Main Controller
+
+**Purpose**: Handles global state, API logic with Axios, validation, and routing.
+
+### 📦 State:
+
+- `user`: Current product/user form data.
+- `list`: List of all users/products.
+- `error`: Validation messages.
+- `editIdx`: Used for determining edit mode.
 
 ### 🔁 Functions:
-- `handleChange`: Handles form input, checkboxes, image upload.
-- `handleSubmit`: Validates and saves product (add/edit).
-- `handleDelete`: Removes product from list and storage.
-- `handleEdit`: Loads product into form for editing.
-- `Validation`: Checks if required fields are filled.
 
-### 🗂️ Routes:
-- `/` → `<Home />`
-- `/form` → `<Form />` (product add/edit form)
-- `/datatable` → `<Datatable />` (product list view)
+```js
+useEffect(() => {
+  handleFetch();
+}, []);
+```
+
+```js
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setUser({ ...user, [name]: value });
+};
+```
+
+```js
+const handleFetch = async () => {
+  const res = await axios.get(url);
+  setList(res.data);
+};
+```
+
+```js
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validation()) return;
+
+  if (editIdx === "") {
+    await axios.post(url, { ...user, id: String(Date.now()) });
+  } else {
+    await axios.put(`${url}/${editIdx}`, user);
+    setEditIdx("");
+  }
+
+  handleFetch();
+  navi("/datatable");
+  setUser({});
+};
+```
+
+```js
+const handleEdit = (id) => {
+  const item = list.find((el) => el.id === id);
+  setUser(item);
+  setEditIdx(id);
+  navi("/form");
+};
+```
+
+```js
+const handleDelete = async (id) => {
+  await axios.delete(`${url}/${id}`);
+  handleFetch();
+};
+```
+
+```js
+const validation = () => {
+  const error = {};
+  if (!user.fullName) error.fullName = "Full Name is required";
+  if (!user.email) error.email = "Email is required";
+  if (!user.password) error.password = "Password is required";
+  if (!user.age) error.age = "Age is required";
+  setError(error);
+  return Object.keys(error).length === 0;
+};
+```
 
 ---
 
 ## 🏠 Home.jsx
 
-**Purpose**: Landing page with navigation buttons.
+**Purpose**: Simple landing page.
 
-**Features**:
-- Welcome message.
-- Buttons to:
-  - Add a product (`/form`)
-  - View products (`/datatable`)
+### Features:
+- Welcome text.
+- Buttons to navigate to:
+  - Add Product (`/form`)
+  - View Products (`/datatable`)
 
 ---
 
 ## 📝 Form.jsx
 
-**Purpose**: Product creation and editing form.
+**Purpose**: To add or edit a product.
 
-**Props**:
-- `handleChange`: Input/checkbox/image handler.
-- `handleSubmit`: Save/update product.
-- `product`: Current form state.
-- `godown`: Selected checkboxes.
-- `error`: Validation feedback.
+### Props:
+- `handleChange`
+- `handleSubmit`
+- `user`
+- `error`
 
-**Features**:
-- Inputs: name, price, stock, description.
-- Godown checkboxes: A, B, C.
-- Image file upload (base64).
-- Shows validation errors inline.
+### Features:
+- Input fields: Full Name, Email, Password, Age.
+- Inline validation errors.
 
 ---
 
 ## 📊 Datatable.jsx
 
-**Purpose**: Displays a product list with edit/delete controls.
+**Purpose**: Lists all users/products.
 
-**Props**:
-- `list`: Array of products.
-- `handleEdit`: Loads product in edit mode.
-- `handleDelete`: Removes product from list.
+### Props:
+- `list`
+- `handleEdit`
+- `handleDelete`
 
-**Features**:
-- Table with: name, price, stock, godown, image.
-- Buttons: Edit / Delete.
-- Message if no products are present.
+### Features:
+- Table view: name, email, etc.
+- Action buttons: Edit and Delete.
+- Shows message if the list is empty.
+
+---
+
+## 🔗 JSON Server Setup
+
+To run the mock API, install and start **JSON Server**:
+
+```bash
+npm install -g json-server
+json-server --watch db.json --port 3000
+```
+
+Example `db.json`:
+
+```json
+{
+  "users": []
+}
+```
+
+---
